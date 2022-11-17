@@ -13,12 +13,28 @@ import 'swiper/css/pagination'; // スタイルをインポート
 const Home: NextPage = () => {
 
   const [images, setImages] = useState<File[]>([])
+  const inputNameRef = useRef<HTMLInputElement>(null)
   const inputFileRef = useRef<HTMLInputElement>(null)
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  type postData = {
+    name:string | undefined
+    files:FileList | null | undefined
+  }
+
+  const onSubmit =async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("送信");
+    console.dir(inputNameRef.current?.value);
     console.dir(inputFileRef.current?.files);
+    const data:postData = {
+      name:inputNameRef.current?.value,
+      files:inputFileRef.current?.files
+    }
+    
+    const test = await fetch(`${window.location.href}api/upload`) // データ渡して送信
+    // 呼び出し練習
+    // const test = await fetch(`${window.location.href}api/hello`)
+    console.log(await test.json());
     
   };
 
@@ -48,7 +64,7 @@ const Home: NextPage = () => {
       <Heading>Image Form</Heading>
       <form onSubmit={onSubmit}>
         <FormLabel htmlFor="postName">名前</FormLabel>
-        <Input type="text" id="postName" placeholder="Name" size="lg" />
+        <Input type="text" id="postName" placeholder="Name" size="lg" ref={inputNameRef}/>
         <FormLabel htmlFor="postImages">画像</FormLabel>
         {/* <Box w="full" h="20" border="1px dashed #888" textAlign="center" alignItems="center" {...getRootProps()}> */}
           {/* <input */}
@@ -79,7 +95,7 @@ const Home: NextPage = () => {
 
           {images.map((image, i) => (
             <SwiperSlide key={i}>
-              <Image src={URL.createObjectURL(image)} w="full" />
+              <Image src={URL.createObjectURL(image)} w="full" h="40vw" objectFit="cover" />
             </SwiperSlide>
           ))}
         </Swiper>
