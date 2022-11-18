@@ -18,22 +18,11 @@ const Home: NextPage = () => {
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
 
-  type postData = {
-    name: string | undefined;
-    files: FileList | null | undefined | File[];
-  };
-
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("送信");
 
     const name = inputNameRef.current?.value
-
-    // const data: postData = {
-    //   name: inputNameRef.current?.value,
-    //   // files:inputFileRef.current?.files,
-    //   files: images,
-    // };
 
     const formData = new FormData();
     formData.append("name", name || "");
@@ -45,10 +34,9 @@ const Home: NextPage = () => {
 
     const post = await fetch(`${window.location.href}api/upload`, {
       method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
-      // body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
       body: formData,
     }); 
 
