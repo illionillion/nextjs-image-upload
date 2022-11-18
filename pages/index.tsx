@@ -27,18 +27,29 @@ const Home: NextPage = () => {
     e.preventDefault();
     console.log("送信");
 
-    const data: postData = {
-      name: inputNameRef.current?.value,
-      // files:inputFileRef.current?.files,
-      files: images,
-    };
+    const name = inputNameRef.current?.value
+
+    // const data: postData = {
+    //   name: inputNameRef.current?.value,
+    //   // files:inputFileRef.current?.files,
+    //   files: images,
+    // };
+
+    const formData = new FormData();
+    formData.append("name", name || "");
+
+    for await(const [i, v] of Object.entries(images)) {
+      formData.append("files", v );
+    }
+
 
     const post = await fetch(`${window.location.href}api/upload`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      // body: JSON.stringify(data),
+      body: formData,
     }); 
 
     console.log(await post.json());
