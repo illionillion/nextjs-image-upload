@@ -31,3 +31,12 @@ export default function handler(
     res.status(200).json({ name: "!!!" });
   })
 }
+
+// ダメだった
+// export async function getStaticProps() {
+//   // `getStaticProps()` の中で `fs` を少しでも利用すれば OK
+//   formidable
+//   return {
+//     props: {}
+//   }
+// }
