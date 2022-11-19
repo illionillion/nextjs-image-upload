@@ -9,7 +9,7 @@ export const config = {
   },
 };
 type Data = {
-  name: string;
+  msg?: string;
 };
 export default function handler(
   req: NextApiRequest,
@@ -46,6 +46,15 @@ export default function handler(
     console.log(value);
   })
 
+  form.once('end', () => {
+    // console.log(' prosecc is end');
+
+    // ここで保存の操作
+
+    
+    
+  })
+
   form.parse(req) // どっち？
   // form.parse(req, async (err, fields, files) => {
   //   console.log("fields:", fields); // { name: '*'}
@@ -53,5 +62,5 @@ export default function handler(
 
   //   res.status(200).json({ name: "!!!" });
   // });
-  res.status(200).json({ name: "!!!" });
+  res.status(200).json({ msg: "success!!" });
 }
