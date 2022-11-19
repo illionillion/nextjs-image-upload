@@ -14,7 +14,7 @@ import "swiper/css/navigation"; // スタイルをインポート
 import "swiper/css/pagination"; // スタイルをインポート
 
 const Home: NextPage = () => {
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<Blob[]>([]);
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
 
@@ -25,18 +25,15 @@ const Home: NextPage = () => {
     const name = inputNameRef.current?.value
 
     const formData = new FormData();
-    formData.append("name", name || "");
-
+    
     for await(const [i, v] of Object.entries(images)) {
-      formData.append("files", v );
+      formData.append(i , v);
     }
+    formData.append("name", name || "");
 
 
     const post = await fetch(`${window.location.href}api/upload`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
       body: formData,
     }); 
 
@@ -45,14 +42,13 @@ const Home: NextPage = () => {
 
   const handleOnAddImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    // setImages([...images, ...e.target.files]);
     setImages([...e.target.files]);
   };
 
   return (
     <Container pt="10">
       <Heading>Image Form</Heading>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} encType='multipart/form-data'>
         <FormLabel htmlFor="postName">名前</FormLabel>
         <Input
           type="text"
@@ -67,9 +63,7 @@ const Home: NextPage = () => {
           id="postImages"
           multiple
           accept="image/*,.png,.jpg,.jpeg,.gif"
-          onChange={(e) => {
-            handleOnAddImage(e);
-          }}
+          onChange={handleOnAddImage}
           ref={inputFileRef}
         />
         <Input type="submit" value="送信" margin="10px auto" variant="filled" />
