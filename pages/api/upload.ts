@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
-import fs, { writeFileSync } from "fs";
+import { createWriteStream } from "fs";
 
 // これ必要なことに気づかなかった↓
 export const config = {
@@ -19,61 +19,39 @@ export default function handler(
 
   const form = formidable({ multiples: true, uploadDir: __dirname });
 
-  let files:any = {
-
-  }
-
   form.onPart = (part) => {
-    console.log(part.name);
     
     // let formidable handle only non-file parts
-    if (part.originalFilename === '' || !part.mimetype) {
+    if (part.originalFilename === "" || !part.mimetype) {
       // used internally, please do not override!
       form._handlePart(part);
-    } else {
+    } else if (part.originalFilename) {
       
-      part.on("data", (buffer) => {
-        // do whatever you want here
-        // console.log(buffer);
-        files[part.name || ''] += buffer
-        // stream.write(buffer)
-      });
-      const stream = fs.createWriteStream(__dirname + '/../../' + part.originalFilename);
-      part.pipe(stream) // 動かない
+      console.log(part.name);
+      const path =
+        "./public/images/" + new Date().getTime() + part.originalFilename;
+      const stream = createWriteStream(path);
+      part.pipe(stream);
 
-      part.on('end',()=>{
-        console.log(part.name  + ' is end');
-        console.log(part.originalFilename + ' is end');
-        // part.pipe()
-        // console.log(files[part.name || '']);
-        // stream.write(files[part.name || ''])
-        // stream.end()
-        stream.close()
-        // writeFileSync(__dirname + '/../../' + part.originalFilename, files[part.name || ''] ) // なぜかwritefileできなかった
-      })
+      part.on("end", () => {
+        console.log(part.originalFilename + " is uploaded");
+        stream.close();
+      });
+
     }
   };
 
-  // 使わない？
-  form.parse(req, async function (err, fields, files) {
-    if (err) {
-      res.status(500).json({ name: err });
-      res.end();
-      return;
-    }
-    console.log(fields);
-    // console.log(files);
+  form.on('field', (name, value) => {
+    console.log(name);
+    console.log(value);
+  })
 
-    Object.keys(files).forEach((i) => {
-      // console.log(files[i]);
-      console.log('parse' + i);
-      
-    });
+  form.parse(req) // どっち？
+  // form.parse(req, async (err, fields, files) => {
+  //   console.log("fields:", fields); // { name: '*'}
+  //   console.log("files:", files); // {}
 
-    for await (const [i, v] of Object.entries(files)) {
-      
-    }
-
-    res.status(200).json({ name: "!!!" });
-  });
+  //   res.status(200).json({ name: "!!!" });
+  // });
+  res.status(200).json({ name: "!!!" });
 }

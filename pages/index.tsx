@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     const formData = new FormData();
     
     for await(const [i, v] of Object.entries(images)) {
-      formData.append(i , v);
+      formData.append('files' , v);
     }
     formData.append("name", name || "");
 
