@@ -55,6 +55,7 @@ const Home: NextPage = () => {
           id="postName"
           placeholder="Name"
           size="lg"
+          required
           ref={inputNameRef}
         />
         <FormLabel htmlFor="postImages">画像</FormLabel>
@@ -64,6 +65,7 @@ const Home: NextPage = () => {
           multiple
           accept="image/*,.png,.jpg,.jpeg,.gif"
           onChange={handleOnAddImage}
+          required
           ref={inputFileRef}
         />
         <Input type="submit" value="送信" margin="10px auto" variant="filled" />
