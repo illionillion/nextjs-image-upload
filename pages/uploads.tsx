@@ -7,40 +7,31 @@ import {
   Input,
   Link,
 } from "@chakra-ui/react";
-import type { NextPage } from "next";
+import type { GetStaticProps, GetStaticPropsResult, NextPage } from "next";
 import { Swiper, SwiperSlide } from "swiper/react"; //カルーセル用のタグをインポート
 import { Pagination, Navigation } from "swiper"; //使いたい機能をインポート
 import "swiper/css";
 import "swiper/css/navigation"; // スタイルをインポート
 import "swiper/css/pagination"; // スタイルをインポート
 import fsPromises from "fs/promises";
-
-// JSONデータを取得したい
+import { SaveData } from "./api/upload";
+import Head from "next/head";
 
 type PropsData = {
-  data: ImagesData[];
-};
-type ImagesData = {
-  id: number;
-  imageName: string;
-  imagePath: string;
-};
-type SaveData = {
-  id: number;
-  titleName: string;
-  images: ImagesData[];
+  data: SaveData[];
 };
 
-const UploadList: NextPage = (props) => {
-  console.log(props);
+const UploadList: React.FC<PropsData> = ({data}) => {
+  console.log(data);
 
   return (
     <Container>
+      <Head>
+        <title>画像一覧</title>
+      </Head>
       <Heading>画像一覧</Heading>
-      {/* @ts-ignore */}
-      {props.data.map((val, index) => (
+      {data.map((val, index) => (
         <Container key={index} pt={5} >
-          {/* {val.id} */}
           <Heading as="h2">{val.titleName}</Heading>
           <Container>
             <Swiper
@@ -52,7 +43,6 @@ const UploadList: NextPage = (props) => {
               navigation //スライドを前後させるためのボタン、スライドの左右にある
               loop={true}
             >
-              {/* @ts-ignore */}
               {val.images.map((image, i) => (
                 <SwiperSlide key={i}>
                   <Image
@@ -74,12 +64,12 @@ const UploadList: NextPage = (props) => {
 
 export default UploadList;
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps<PropsData> = async () => {
   const data = await fsPromises.readFile("./public/db.json", {
     encoding: "utf-8",
   });
   console.log(data);
-  const objectData = { data: JSON.parse(data) };
+  const objectData: PropsData = { data: JSON.parse(data) };
 
   return {
     props: objectData,

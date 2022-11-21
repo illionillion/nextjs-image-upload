@@ -13,6 +13,7 @@ import { Pagination, Navigation } from "swiper"; //使いたい機能をイン�
 import "swiper/css";
 import "swiper/css/navigation"; // スタイルをインポート
 import "swiper/css/pagination"; // スタイルをインポート
+import Head from "next/head";
 
 const Home: NextPage = () => {
   const [images, setImages] = useState<Blob[]>([]);
@@ -48,6 +49,9 @@ const Home: NextPage = () => {
 
   return (
     <Container pt="10">
+      <Head>
+        <title>投稿フォーム</title>
+      </Head>
       <Heading>Image Form</Heading>
       <form onSubmit={onSubmit} encType='multipart/form-data'>
         <FormLabel htmlFor="postName">名前</FormLabel>
