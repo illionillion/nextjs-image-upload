@@ -4,6 +4,7 @@ import {
   Heading,
   Image,
   Input,
+  Link,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
@@ -92,6 +93,7 @@ const Home: NextPage = () => {
           ))}
         </Swiper>
       </Container>
+      <Link href="/uploads" color="blue.600">一覧ページへ</Link>
     </Container>
   );
 };

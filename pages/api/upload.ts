@@ -40,7 +40,8 @@ export default function handler(
     images: [],
   };
 
-  const form = formidable({ multiples: true, uploadDir: __dirname });
+  // const form = formidable({ multiples: true, uploadDir: __dirname });
+  const form = formidable({ multiples: true, });
 
   form.onPart = (part) => {
     // let formidable handle only non-file parts
@@ -53,8 +54,8 @@ export default function handler(
         mkdirSync("./public/images/");
       }
       const path =
-        "./public/images/" + new Date().getTime() + part.originalFilename;
-      const stream = createWriteStream(path);
+        "/images/" + new Date().getTime() + part.originalFilename;
+      const stream = createWriteStream("./public" +path);
       part.pipe(stream);
 
       part.on("end", () => {
