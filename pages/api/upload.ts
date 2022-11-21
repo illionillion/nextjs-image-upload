@@ -17,22 +17,22 @@ export const config = {
 type Data = {
   msg?: string;
 };
+export type ImagesData = {
+  id: number;
+  imageName: string;
+  imagePath: string;
+};
+export type SaveData = {
+  id: number;
+  titleName: string;
+  images: ImagesData[];
+};
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   if (req.method !== "POST") return;
-
-  type ImagesData = {
-    id: number;
-    imageName: string;
-    imagePath: string;
-  };
-  type SaveData = {
-    id: number;
-    titleName: string;
-    images: ImagesData[];
-  };
 
   const saveData: SaveData = {
     id: 0,
