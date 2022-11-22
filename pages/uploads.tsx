@@ -1,13 +1,12 @@
 import {
-  Box,
+  Button,
+  Center,
   Container,
-  FormLabel,
   Heading,
   Image,
-  Input,
   Link,
 } from "@chakra-ui/react";
-import type { GetStaticProps, GetStaticPropsResult, NextPage } from "next";
+import type { GetStaticProps } from "next";
 import { Swiper, SwiperSlide } from "swiper/react"; //カルーセル用のタグをインポート
 import { Pagination, Navigation } from "swiper"; //使いたい機能をインポート
 import "swiper/css";
@@ -21,8 +20,20 @@ type PropsData = {
   data: SaveData[];
 };
 
-const UploadList: React.FC<PropsData> = ({data}) => {
+const UploadList: React.FC<PropsData> = ({ data }) => {
   console.log(data);
+
+  const deleteHandler = async (id: number) => {
+    console.log(id);
+    const req = await fetch(`/api/delete`, {
+      method: 'POST',
+      body: id.toString()
+    })
+
+    if (req.status === 200) {
+      window.location.reload()
+    }
+  }
 
   return (
     <Container>
@@ -31,7 +42,7 @@ const UploadList: React.FC<PropsData> = ({data}) => {
       </Head>
       <Heading>画像一覧</Heading>
       {data.map((val, index) => (
-        <Container key={index} pt={5} >
+        <Container key={index} pt={5} borderBottom="1px solid">
           <Heading as="h2">{val.titleName}</Heading>
           <Container>
             <Swiper
@@ -55,9 +66,14 @@ const UploadList: React.FC<PropsData> = ({data}) => {
               ))}
             </Swiper>
           </Container>
+          <Center padding={3}>
+            <Button w="44" colorScheme="red" onClick={() => deleteHandler(val.id)}>削除</Button>
+          </Center>
         </Container>
       ))}
-      <Link href="/" color="blue.600">投稿ページへ</Link>
+      <Link href="/" color="blue.600">
+        投稿ページへ
+      </Link>
     </Container>
   );
 };

@@ -93,7 +93,7 @@ export default function handler(
     const getData = readFileSync("./public/db.json", { encoding: "utf-8" });
     // console.log(getData);
     const newData: SaveData[] = JSON.parse(getData);
-    saveData.id = newData.length;
+    saveData.id = !newData.length ? newData.length :  Math.max(...newData.map(value=>value.id)) + 1;
     newData.push(saveData);
     writeFileSync("./public/db.json", JSON.stringify(newData), {
       encoding: "utf-8",

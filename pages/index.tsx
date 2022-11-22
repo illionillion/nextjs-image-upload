@@ -34,7 +34,7 @@ const Home: NextPage = () => {
     formData.append("name", name || "");
 
 
-    const post = await fetch(`${window.location.href}api/upload`, {
+    const post = await fetch(`/api/upload`, {
       method: "POST",
       body: formData,
     }); 
