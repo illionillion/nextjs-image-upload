@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/formidable": "^2.0.5",
     "formidable": "^2.0.1",
     "next": "13.0.3",
     "react": "18.2.0",
@@ -21,9 +20,11 @@
     "@chakra-ui/react": "^2.4.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@types/formidable": "^2.0.5",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
+    "@types/react-dropzone": "^5.1.0",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
     "framer-motion": "^4.1.17",
